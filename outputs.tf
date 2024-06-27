@@ -1,3 +1,30 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:16f5fa452d387d509ffa1091770d877252934cfa78599db21d8f92efc875b43e
-size 603
+output "webserver_publicIP_address" {
+    value = aws_instance.web_server.public_ip
+}
+
+output "webserver_privateIP_address" {
+    value = aws_instance.web_server.private_ip
+}
+
+output "webserver_instance_status" {
+    value = aws_instance.web_server.instance_state
+}
+
+output "docker_instance_status" {
+    value = aws_instance.docker_server.instance_state
+}
+
+
+output "docker_publicIP_address" {
+    value = aws_instance.docker_server.public_ip
+}
+
+output "docker_privateIP_address" {
+    value = aws_instance.docker_server.private_ip
+}
+
+
+output "sg_id" {
+    value = aws_security_group.webserver_sg.id
+}
+
