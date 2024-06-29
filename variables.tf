@@ -3,6 +3,11 @@
 
 // image_id = "ami-08a0d1e16fc3f61ea"
 
+variable "aws_region" {
+    type = string
+    default = "us-east-1"
+}
+
 variable "image_id" {
     type = string
     default = "ami-08a0d1e16fc3f61ea"
@@ -53,7 +58,7 @@ variable "dockerserver_tags" {
 
 variable "Sg_ports" {
     type = list(number)
-    default = [ 22, 80, 0 ]
+    default = [ 22, 80, 443 ]
 }
 
 
