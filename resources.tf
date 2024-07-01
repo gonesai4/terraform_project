@@ -26,6 +26,33 @@ resource "aws_instance" "web_server"{
     user_data = file(var.webserver_script)   //("./scripts/webservice.sh")
     
     tags = var.webserver_tags
+    provisioner "local-exec" {
+      command    = "echo ${self.private_ip} > private_IPs.txt"
+    }
+
+    connection {
+      type     = "ssh"
+      user     = "ec2-user"
+      host     = self.public_ip
+      private_key = file("./terraform_key.pem")
+    }
+
+    provisioner "file" {
+      source      = "private_IPs.txt"
+      destination = "/tmp/private_IPs.txt"
+    }
+
+    provisioner "file" {
+      source      = "scripts/provisioner.sh"
+      destination = "/tmp/provisioner.sh"
+    }
+
+    provisioner "remote-exec" {
+      inline = [
+        "chmod +x /tmp/provisioner.sh",
+        "/tmp/provisioner.sh",
+      ]
+    }
 }
 
 resource "aws_instance" "docker_server"{
@@ -36,6 +63,21 @@ resource "aws_instance" "docker_server"{
     user_data = file(var.docker_script)     //("./scripts/dockerservice.sh")
     
     tags = var.dockerserver_tags
+    provisioner "local-exec" {
+      command    = "echo ${self.private_ip} >> private_IPs.txt"
+    }
+
+    connection {
+      type     = "ssh"
+      user     = "ec2-user"
+      host     = self.public_ip
+      private_key = file("./terraform_key.pem")
+    }
+
+    provisioner "file" {
+      source      = "private_IPs.txt"
+      destination = "/tmp/private_IPs.txt"
+    }
 }
 
 
